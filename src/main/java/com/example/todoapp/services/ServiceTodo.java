@@ -3,7 +3,6 @@ package com.example.todoapp.services;
 import com.example.todoapp.entities.TodoItem;
 import com.example.todoapp.repositories.TodoItemRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,7 +41,6 @@ public class ServiceTodo {
         return todoItemRepository.findById(id);
     }
 
-    // U — Update
     public TodoItem update(Long id, String newTitle, Date newDate) {
         Optional<TodoItem> optionalTodo = todoItemRepository.findById(id);
         if (optionalTodo.isPresent()) {
