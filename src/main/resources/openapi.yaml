@@ -1,0 +1,185 @@
+openapi: 3.0.3
+info:
+  title: Менеджер задач
+  version: 1.0.0
+  description: API для управления задачами.
+
+servers:
+  - url: http://localhost:8080/api
+
+paths:
+  /todos:
+    get:
+      summary: Получить список всех задач
+      operationId: getAllTodos
+      tags:
+        - Todos
+      responses:
+        '200':
+          description: Список задач
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TodoItem'
+
+  /todos/add:
+    post:
+      summary: Добавить новую задачу
+      operationId: addTodo
+      tags:
+        - Todos
+      parameters:
+        - name: title
+          in: query
+          description: Название задачи
+          required: true
+          schema:
+            type: string
+        - name: dateTodo
+          in: query
+          description: Дата задачи в формате yyyy-MM-dd
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '201':
+          description: Задача успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoItem'
+        '400':
+          description: Неверный запрос
+
+  /todos/delete/{id}:
+    delete:
+      summary: Удалить задачу по ID
+      operationId: deleteTodoItem
+      tags:
+        - Todos
+      parameters:
+        - name: id
+          in: path
+          description: ID задачи
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Задача удалена
+        '404':
+          description: Задача не найдена
+
+  /todos/removeAll:
+    delete:
+      summary: Удалить все задачи
+      operationId: removeAllItem
+      tags:
+        - Todos
+      responses:
+        '204':
+          description: Все задачи удалены
+
+  /todos/update/{id}:
+    put:
+      summary: Обновить задачу по ID
+      operationId: updateTodo
+      tags:
+        - Todos
+      parameters:
+        - name: id
+          in: path
+          description: ID задачи
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: title
+          in: query
+          description: Новое название задачи
+          required: true
+          schema:
+            type: string
+        - name: dateTodo
+          in: query
+          description: Новая дата задачи (yyyy-MM-dd)
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Задача обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoItem'
+        '404':
+          description: Задача не найдена
+
+  /todos/next-week:
+    get:
+      summary: Получить задачи на следующую неделю
+      operationId: getTodosForNextWeek
+      tags:
+        - Todos
+      responses:
+        '200':
+          description: Список задач на следующую неделю
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TodoItem'
+
+  /todos/{id}:
+    get:
+      summary: Получить задачу по ID
+      operationId: getTodoById
+      tags:
+        - Todos
+      parameters:
+        - name: id
+          in: path
+          description: ID задачи
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Задача найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoItem'
+        '404':
+          description: Задача не найдена
+
+components:
+  schemas:
+    TodoItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор задачи
+          example: 1
+        title:
+          type: string
+          description: Название задачи
+          example: "Прочитать книгу"
+        dateTodo:
+          type: string
+          format: date
+          description: Дата выполнения задачи
+          example: "2025-07-01"
+      required:
+        - title
+        - dateTodo

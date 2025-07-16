@@ -36,7 +36,6 @@ public class TodoItem {
     @Column(name = "date_todo")
     Date dateTodo;
 
-    // Если нужен конструктор только с title и dateTodo:
     public TodoItem(String title, Date dateTodo) {
         this.title = title;
         this.dateTodo = dateTodo;
